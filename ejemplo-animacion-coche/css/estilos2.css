@@ -1,0 +1,40 @@
+@keyframes animacionCoche
+{
+from { transform:rotate(-18deg); }
+65% { transform:rotate(18deg); }
+to { transform:rotate(0deg); }
+}
+@-webkit-keyframes animacionCoche
+{
+from { -webkit-transform:rotate(-18deg); }
+65% { -webkit-transform:rotate(18deg); }
+to { -webkit-transform:rotate(0deg); }
+}
+@-moz-keyframes animacionCoche
+{
+from { -moz-transform:rotate(-18deg); }
+65% { -moz-transform:rotate(18deg); }
+to { -moz-transform:rotate(0deg); }
+}
+@-o-keyframes animacionCoche
+{
+from { -o-transform:rotate(-18deg); }
+65% { -o-transform:rotate(18deg); }
+to { -o-transform:rotate(0deg); }
+}
+#coche
+{
+animation-duration: 3s;
+animation-name: animacionCoche;
+animation-iteration-count: 1;
+-webkit-animation-duration: 3s;
+-webkit-animation-name: animacionCoche;
+-webkit-animation-iteration-count: 1;
+-moz-animation-duration: 3s;
+-moz-animation-name: animacionCoche;
+-moz-animation-iteration-count: 1;
+-o-animation-duration: 3s;
+-o-animation-name: animacionCoche;
+-o-animation-iteration-count: 1;
+position:relative;
+}

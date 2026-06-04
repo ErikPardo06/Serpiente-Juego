@@ -1,0 +1,118 @@
+@keyframes animacionCoche1
+{ 
+    from { left: 0px; } 
+    65% { left: 10px; } 
+    to { left: 350px; } 
+}
+
+@-webkit-keyframes animacionCoche1
+{ 
+    from { left: 0px; } 
+    65% { left: 10px; } 
+    to { left: 350px; } 
+}
+
+@-moz-keyframes animacionCoche1
+{ 
+    from { left: 0px; } 
+    65% { left: 10px; } 
+    to { left: 350px; } 
+}
+
+@-o-keyframes animacionCoche1
+{ 
+    from { left: 0px; } 
+    65% { left: 10px; } 
+    to { left: 350px; } 
+}
+
+.aCoche1
+{
+    animation-duration: 3s;
+    animation-name: animacionCoche1;
+    animation-iteration-count: 1; 
+	animation-fill-mode: forwards;
+
+    -webkit-animation-duration: 3s;
+    -webkit-animation-name: animacionCoche1;
+    -webkit-animation-iteration-count: 1; 
+	-webkit-animation-fill-mode: forwards;
+
+    -moz-animation-duration: 3s;
+    -moz-animation-name: animacionCoche1;
+    -moz-animation-iteration-count: 1; 
+	-moz-animation-fill-mode: forwards;
+
+    -o-animation-duration: 3s;
+    -o-animation-name: animacionCoche1;
+    -o-animation-iteration-count: 1; 
+	-o-animation-fill-mode: forwards;
+}
+
+@keyframes animacionCoche2
+{ 
+    from { left: 400px; } 
+    65% { left: 550px; } 
+    to { left: 600px; } 
+}
+
+@-webkit-keyframes animacionCoche2
+{ 
+    from { left: 400px; } 
+    65% { left: 550px; } 
+    to { left: 600px; } 
+}
+
+@-moz-keyframes animacionCoche2
+{ 
+    from { left: 400px; } 
+    65% { left: 550px; } 
+    to { left: 600px; } 
+}
+
+@-o-keyframes animacionCoche2
+{ 
+    from { left: 400px; } 
+    65% { left: 550px; } 
+    to { left: 600px; } 
+}
+
+.aCoche2
+{
+    animation-duration: 3s;
+    animation-name: animacionCoche2;
+    animation-iteration-count: 1; 
+	animation-fill-mode: forwards;
+
+    -webkit-animation-duration: 3s;
+    -webkit-animation-name: animacionCoche2;
+    -webkit-animation-iteration-count: 1; 
+	-webkit-animation-fill-mode: forwards;
+
+    -moz-animation-duration: 3s;
+    -moz-animation-name: animacionCoche2;
+    -moz-animation-iteration-count: 1; 
+	-moz-animation-fill-mode: forwards;
+
+    -o-animation-duration: 3s;
+    -o-animation-name: animacionCoche2;
+    -o-animation-iteration-count: 1; 
+	-o-animation-fill-mode: forwards;
+}
+#coche1
+{
+    position:absolute;
+	top:200px;
+	left: 0px;
+	width: 50px;
+	display:inline;
+}
+
+#coche2
+{
+    position:absolute;
+	top:200px;
+	left: 400px;
+	width: 50px;
+	display:inline;
+}
