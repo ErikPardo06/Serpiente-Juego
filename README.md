@@ -17,7 +17,9 @@ Abre `index.html` en un navegador moderno o sirve la carpeta con cualquier servi
 
 - Renderizado Canvas 2D con escalado de alta densidad y bucle `requestAnimationFrame`.
 - Simulación por pasos con interpolación visual para un movimiento suave.
-- Controles con prevención de giros de 180 grados.
+- Controles con prevención de giros de 180 grados y arranque inmediato al elegir la primera dirección.
+- Dificultad progresiva: la serpiente acelera gradualmente al subir de nivel.
+- Fruta dorada de aparición temporal cada cinco comidas: vale 30 puntos extra.
 - Modos Clásico y Sin límites; velocidades Tranquila, Normal y Turbo.
 - Partículas ligeras, brillo sutil y efectos de sonido sintetizados con Web Audio.
 - Récord persistente en `localStorage`, estadísticas de sesión y pausa automática al cambiar de pestaña.
