@@ -27,6 +27,9 @@
   let direction = "right";
   let nextDirection = "right";
   let food = { x: 0, y: 0 };
+  let bonusFood = null;
+  let bonusTime = 0;
+  let regularFoodsEaten = 0;
   let particles = [];
   let score = 0;
   let best = readNumber("neon-snake-best");
@@ -106,6 +109,10 @@
   function resetGame() {
     score = 0;
     foodsEaten = 0;
+    regularFoodsEaten = 0;
+    bonusFood = null;
+    bonusTime = 0;
+    $("#bonus-chip").hidden = true;
     streak = 0;
     elapsed = 0;
     accumulator = 0;
@@ -115,9 +122,13 @@
     updateHud(true);
   }
 
+  function currentInterval() {
+    return Math.max(48, SPEEDS[speed] - Math.floor(score / 50) * 4);
+  }
+
   function startGame() {
     if (state === "running") return;
-    if (state === "over" || state === "won" || state === "ready") resetGame();
+    if (state === "over" || state === "won") resetGame();
     state = "running";
     runStartedAt = performance.now();
     lastFrame = runStartedAt;
@@ -203,7 +214,8 @@
     }
 
     const eating = head.x === food.x && head.y === food.y;
-    const collisionLimit = eating ? snake.length : snake.length - 1;
+    const eatingBonus = Boolean(bonusFood && head.x === bonusFood.x && head.y === bonusFood.y);
+    const collisionLimit = eating || eatingBonus ? snake.length : snake.length - 1;
     for (let i = 0; i < collisionLimit; i += 1) {
       if (snake[i].x === head.x && snake[i].y === head.y) {
         finish(false);
@@ -212,13 +224,22 @@
     }
 
     snake.unshift(head);
-    if (eating) {
-      score += 10;
+    if (eating || eatingBonus) {
+      score += eatingBonus ? 30 : 10;
       foodsEaten += 1;
+      if (eating) regularFoodsEaten += 1;
       streak += 1;
-      spawnParticles(food.x, food.y);
-      placeFood();
-      tone(520 + Math.min(streak, 8) * 35, 0.075, "sine");
+      spawnParticles(head.x, head.y);
+      if (eatingBonus) {
+        bonusFood = null;
+        bonusTime = 0;
+        $("#bonus-chip").hidden = true;
+        tone(880, 0.16, "triangle");
+      } else {
+        placeFood();
+        tone(520 + Math.min(streak, 8) * 35, 0.075, "sine");
+        if (regularFoodsEaten % 5 === 0 && state === "running") placeBonusFood();
+      }
       if (score > best) {
         best = score;
         saveValue("neon-snake-best", best);
@@ -228,6 +249,23 @@
     } else {
       snake.pop();
     }
+  }
+
+  function placeBonusFood() {
+    const occupied = new Set(snake.map((part) => part.x + "," + part.y));
+    occupied.add(food.x + "," + food.y);
+    const free = [];
+    for (let y = 0; y < ROWS; y += 1) {
+      for (let x = 0; x < COLS; x += 1) {
+        if (!occupied.has(x + "," + y)) free.push({ x, y });
+      }
+    }
+    if (!free.length) return;
+    bonusFood = free[Math.floor(Math.random() * free.length)];
+    bonusTime = 7;
+    $("#bonus-chip").hidden = false;
+    $("#bonus-time").textContent = "7";
+    tone(740, 0.1, "sine");
   }
 
   function spawnParticles(x, y) {
@@ -319,6 +357,25 @@
     ctx.moveTo(x + 1, y - 7);
     ctx.quadraticCurveTo(x + 2, y - 12, x + 7, y - 12);
     ctx.stroke();
+    if (bonusFood) {
+      const bx = bonusFood.x * CELL + CELL / 2;
+      const by = bonusFood.y * CELL + CELL / 2;
+      const pulse = 1 + Math.sin(time / 95) * 0.12;
+      const halo = ctx.createRadialGradient(bx, by, 1, bx, by, 22);
+      halo.addColorStop(0, "rgba(255, 213, 104, .42)");
+      halo.addColorStop(1, "rgba(255, 213, 104, 0)");
+      ctx.fillStyle = halo;
+      ctx.fillRect(bx - 22, by - 22, 44, 44);
+      ctx.fillStyle = "#ffd166";
+      ctx.beginPath();
+      ctx.arc(bx, by, 8 * pulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff3c4";
+      ctx.font = "bold 10px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("★", bx, by + 0.5);
+    }
   }
 
   function roundedRect(x, y, width, height, radius) {
@@ -407,8 +464,16 @@
     lastFrame = now;
     if (state === "running") {
       elapsed += delta;
+      if (bonusFood) {
+        bonusTime -= delta;
+        $("#bonus-time").textContent = String(Math.max(0, Math.ceil(bonusTime)));
+        if (bonusTime <= 0) {
+          bonusFood = null;
+          $("#bonus-chip").hidden = true;
+        }
+      }
       accumulator += delta * 1000;
-      const interval = SPEEDS[speed];
+      const interval = currentInterval();
       let safety = 0;
       while (accumulator >= interval && state === "running" && safety < 4) {
         step();
@@ -420,7 +485,7 @@
     } else {
       updateParticles(delta);
     }
-    render(now, state === "running" ? Math.min(1, accumulator / SPEEDS[speed]) : 1);
+    render(now, state === "running" ? Math.min(1, accumulator / currentInterval()) : 1);
     if (state === "running" || particles.length) animationId = requestAnimationFrame(frame);
   }
 
